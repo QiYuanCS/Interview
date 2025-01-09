@@ -64,3 +64,105 @@ int main() {
 
     return 0;
 }
+
+
+
+找出二维数组中的最大数并输出，使用指针运算。并指出第6个数是什么。
+
+#include <stdio.h>
+
+void findMaxAndSixth(int rows, int cols, int arr[rows][cols]) {
+    int *ptr = &arr[0][0]; // 指向数组首地址
+    int max = *ptr;        // 初始化最大值为第一个数
+    int sixthNumber = 0;   // 存储第 6 个数
+    int totalElements = rows * cols;
+
+    // 遍历数组
+    for (int i = 0; i < totalElements; i++) {
+        if (*(ptr + i) > max) {
+            max = *(ptr + i); // 更新最大值
+        }
+        // 如果是第 6 个数
+        if (i == 5) {
+            sixthNumber = *(ptr + i);
+        }
+    }
+
+    // 输出结果
+    printf("The maximum number in the array is: %d\n", max);
+    printf("The 6th number in the array is: %d\n", sixthNumber);
+}
+
+int main() {
+    // 定义一个示例二维数组
+    int array[3][4] = {
+        {3, 8, 12, 7},
+        {5, 15, 20, 11},
+        {6, 13, 10, 9}
+    };
+
+    // 输出数组
+    printf("Array:\n");
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 4; j++) {
+            printf("%d ", array[i][j]);
+        }
+        printf("\n");
+    }
+
+    // 调用函数
+    findMaxAndSixth(3, 4, array);
+
+    return 0;
+}
+
+#include <stdio.h>
+
+void findMaxAndSixth(int rows, int cols, int (*arr)[cols]) {
+    int max = **arr;      // 初始化最大值为数组第一个元素
+    int sixthNumber = 0;  // 第 6 个数存储
+    int count = 0;        // 元素计数器
+
+    // 遍历二维数组
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            int *current = *(arr + i) + j; // 获取当前元素指针
+            if (*current > max) {
+                max = *current; // 更新最大值
+            }
+            count++;
+            if (count == 6) {
+                sixthNumber = *current; // 保存第 6 个数
+            }
+        }
+    }
+
+    // 输出结果
+    printf("The maximum number in the array is: %d\n", max);
+    printf("The 6th number in the array is: %d\n", sixthNumber);
+}
+
+int main() {
+    // 定义一个示例二维数组
+    int array[3][4] = {
+        {3, 8, 12, 7},
+        {5, 15, 20, 11},
+        {6, 13, 10, 9}
+    };
+
+    // 输出数组
+    printf("Array:\n");
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 4; j++) {
+            printf("%d ", array[i][j]);
+        }
+        printf("\n");
+    }
+
+    // 调用函数
+    findMaxAndSixth(3, 4, array);
+
+    return 0;
+}
+
+
