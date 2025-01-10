@@ -165,4 +165,54 @@ int main() {
     return 0;
 }
 
+有一个uint16_t readPin()函数获取一个uint16_t数，从中提取port0（0-3位）、port1（4-7位）、port2（8-11位、port3（12-15位），并根据表格将port与pin匹配，输出对应的端口名。
+
+数据格式：
+假设 uint16_t 的数据格式如下（每 4 位一个端口）：
+| port3 (12-15) | port2 (8-11) | port1 (4-7) | port0 (0-3) |
+功能需求：
+提取每个 port 的值（4 位），即通过位运算提取 port0 到 port3。
+根据给定表格（示例数据）输出 port 和 pin 的对应关系。
+实现方法：
+使用掩码和移位操作提取各部分。
+定义一个表格（或数组）存储端口与引脚名的映射关系。
+
+#include <stdio.h>
+#include <stdint.h>
+
+// 表格：端口与引脚名映射
+const char *portNames[] = {"PortA", "PortB", "PortC", "PortD", "PortE", "PortF", "PortG", "PortH",
+                           "PortI", "PortJ", "PortK", "PortL", "PortM", "PortN", "PortO", "PortP"};
+
+// 从 uint16_t 数据中提取端口信息并输出
+void processPinData(uint16_t data) {
+    uint8_t port0 = data & 0xF;          // 提取 0-3 位
+    uint8_t port1 = (data >> 4) & 0xF;  // 提取 4-7 位
+    uint8_t port2 = (data >> 8) & 0xF;  // 提取 8-11 位
+    uint8_t port3 = (data >> 12) & 0xF; // 提取 12-15 位
+
+    // 输出结果
+    printf("Extracted Ports:\n");
+    printf("Port0 (0-3): %s (Pin %d)\n", portNames[port0], port0);
+    printf("Port1 (4-7): %s (Pin %d)\n", portNames[port1], port1);
+    printf("Port2 (8-11): %s (Pin %d)\n", portNames[port2], port2);
+    printf("Port3 (12-15): %s (Pin %d)\n", portNames[port3], port3);
+}
+
+// 模拟 readPin 函数
+uint16_t readPin() {
+    return 0xABCD; // 示例数据，实际值应由硬件读取
+}
+
+int main() {
+    // 读取数据
+    uint16_t pinData = readPin();
+    printf("Read Data: 0x%04X\n", pinData);
+
+    // 处理数据
+    processPinData(pinData);
+
+    return 0;
+}
+
 
