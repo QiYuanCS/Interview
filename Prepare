@@ -215,4 +215,13 @@ int main() {
     return 0;
 }
 
+提取各部分：
+data & 0xF 提取 port0（最低 4 位）。
+(data >> 4) & 0xF 提取 port1（移位并掩码）。
+(data >> 8) & 0xF 提取 port2。
+(data >> 12) & 0xF 提取 port3。
+映射关系：
+使用 portNames 数组存储端口名，数组索引对应位段值。
+输出结果：
+根据提取的位段值，输出端口名及引脚编号。
 
