@@ -225,3 +225,33 @@ data & 0xF 提取 port0（最低 4 位）。
 输出结果：
 根据提取的位段值，输出端口名及引脚编号。
 
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+void convertTwiceToUpper(char *str) {
+    int charCount[26] = {0}; // 用于记录每个小写字母的出现次数
+    int i;
+
+    // 遍历字符串，统计每个字符的出现次数
+    for (i = 0; str[i] != '\0'; i++) {
+        if (str[i] >= 'a' && str[i] <= 'z') {
+            charCount[str[i] - 'a']++;
+        }
+    }
+
+    // 再次遍历字符串，把出现两次的字符转换为大写
+    for (i = 0; str[i] != '\0'; i++) {
+        if (charCount[str[i] - 'a'] == 2) {
+            str[i] = toupper(str[i]);
+        }
+    }
+}
+
+int main() {
+    char str[] = "abcdeabcdeffggh";
+    printf("原始字符串: %s\n", str);
+    convertTwiceToUpper(str);
+    printf("转换后字符串: %s\n", str);
+    return 0;
+}
