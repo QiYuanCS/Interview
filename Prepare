@@ -317,6 +317,113 @@ Linux 启动流程主要分为以下阶段：
 这是一种分层、模块化的启动流程设计，便于调试和扩展系统功能。
 
 
+链表（Linked List）和数组（Array）是两种常见的数据结构，它们在存储形式和使用场景上有显著的区别。以下是两者的存储形式和特点的详细比较：
+1. 数组的存储形式
+
+特点：
+连续存储：
+数组中的元素存储在内存中的连续地址空间中。
+如果数组的首地址为 arr，第 
+i 个元素的地址为：arr + i * sizeof(element)。
+索引访问：
+数组支持随机访问，可以通过索引直接访问元素，时间复杂度为 
+O(1)。
+固定大小：
+数组在声明时需要指定大小，大小一旦确定无法动态改变。
+内存模型：
+通常分配在栈内存（对于局部数组）或堆内存（对于动态分配的数组，如 malloc）。
+示例代码：
+// 静态数组
+int arr[5] = {1, 2, 3, 4, 5};
+
+// 动态数组
+int *dynamicArr = (int *)malloc(5 * sizeof(int));
+for (int i = 0; i < 5; i++) {
+    dynamicArr[i] = i + 1;
+}
+2. 链表的存储形式
+
+特点：
+分散存储：
+链表中的每个节点可以存储在内存中的任意位置。
+每个节点包含两部分：
+数据部分（存储值）。
+指针部分（指向下一个节点的地址）。
+动态扩展：
+链表在需要时动态分配内存，不需要提前定义大小。
+顺序访问：
+链表不支持随机访问，必须从头节点开始依次遍历，访问某个节点的时间复杂度为 
+O(n)。
+内存模型：
+每个节点通常通过动态内存分配（如 malloc）创建，节点之间通过指针连接。
+示例代码：
+单链表：
+#include <stdio.h>
+#include <stdlib.h>
+
+// 定义链表节点
+typedef struct Node {
+    int data;           // 数据域
+    struct Node *next;  // 指针域
+} Node;
+
+// 创建一个新节点
+Node *createNode(int value) {
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->data = value;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// 插入节点
+void insert(Node **head, int value) {
+    Node *newNode = createNode(value);
+    newNode->next = *head;
+    *head = newNode;
+}
+
+// 遍历链表
+void traverse(Node *head) {
+    Node *current = head;
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    Node *head = NULL; // 初始化空链表
+    insert(&head, 10);
+    insert(&head, 20);
+    insert(&head, 30);
+    traverse(head); // 输出: 30 -> 20 -> 10 -> NULL
+    return 0;
+}
+双链表：
+typedef struct DNode {
+    int data;
+    struct DNode *prev; // 指向前一个节点
+    struct DNode *next; // 指向后一个节点
+} DNode;
+3. 对比总结
+
+特性	数组（Array）	链表（Linked List）
+存储方式	连续内存	分散存储，节点通过指针连接
+访问方式	随机访问，时间复杂度 
+O(1)	顺序访问，时间复杂度 
+O(n)插入/删除效率	插入/删除需要移动元素，时间复杂度 
+O(n)	插入/删除高效，只需修改指针，时间复杂度 
+O(1)（给定节点）
+大小是否固定	固定大小，声明时需确定	动态调整，可随时增减节点
+内存利用率	高，但可能会浪费空间	高效，仅使用需要的内存
+实现复杂度	简单	较复杂，需要维护指针关系
+适用场景	随机访问频繁，数据量较小	动态数据量，插入/删除操作较多
+使用场景
+数组：
+适用于数据量较小、需要快速随机访问的场景，如排序、静态表。
+链表：
+适用于动态数据量、插入删除频繁的场景，如队列、图的邻接表表示等。
 
 
 
