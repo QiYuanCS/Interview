@@ -425,6 +425,68 @@ O(1)（给定节点）
 链表：
 适用于动态数据量、插入删除频繁的场景，如队列、图的邻接表表示等。
 
+如何判断操作系统是64位还是32位的
+ChatGPT 说：
+
+ChatGPT
+判断操作系统是 64 位还是 32 位的方法有多种，可以根据不同的操作系统类型（如 Windows、Linux 和 macOS）选择适合的方法。以下是几种常见的方式：
+1. 在 Windows 系统上
+方法一：通过系统信息查看
+右键点击桌面上的“此电脑”或“我的电脑”图标，选择“属性”。
+在“系统类型”一栏可以看到操作系统的架构：
+64 位操作系统 或 32 位操作系统。
+方法二：使用命令行工具
+打开命令提示符（按 Win + R，输入 cmd，然后回车）。
+输入以下命令并查看结果：
+systeminfo | findstr /C:"System Type"
+如果显示 x64-based PC，则是 64 位操作系统。
+如果显示 x86-based PC，则是 32 位操作系统。
+方法三：检查 Program Files 文件夹
+64 位系统中有两个文件夹：
+C:\Program Files：存储 64 位程序。
+C:\Program Files (x86)：存储 32 位程序。
+32 位系统中只有 C:\Program Files 文件夹。
+2. 在 Linux 系统上
+方法一：通过 uname 命令
+打开终端。
+输入以下命令：
+uname -m
+如果输出是 x86_64，则是 64 位系统。
+如果输出是 i386、i686 或类似的内容，则是 32 位系统。
+方法二：通过 file 命令检查内核
+在终端中输入以下命令：
+file /bin/ls
+如果结果中包含 64-bit，则是 64 位系统。
+如果包含 32-bit，则是 32 位系统。
+方法三：检查系统架构
+输入以下命令：
+lscpu
+查看 Architecture 字段，显示 x86_64 表示 64 位系统，i686 表示 32 位系统。
+3. 在 macOS 系统上
+macOS 在 2007 年后已全面转向 64 位架构，但可以通过以下方式确认：
+方法一：通过系统信息查看
+点击屏幕左上角苹果菜单，选择“关于本机”。
+点击“系统报告”。
+在“硬件”部分查看“处理器名称”：
+如果显示为 64 位处理器（如 Intel Core i5/i7/i9 或 Apple M 系列芯片），则支持 64 位。
+方法二：通过终端命令
+打开终端。
+输入以下命令：
+uname -m
+如果输出是 x86_64 或 arm64，则是 64 位系统。
+4. 使用 Python 脚本检查（跨平台）
+Python 脚本可以用来跨平台检查系统的位数：
+import platform
+import struct
+
+def check_system_architecture():
+    arch = platform.architecture()[0]
+    bit = struct.calcsize("P") * 8
+    print(f"System Architecture: {arch}, {bit}-bit")
+
+check_system_architecture()
+运行此脚本后会显示系统架构信息。
+
 
 
 
