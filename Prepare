@@ -653,6 +653,50 @@ struct 包装数组	需要按值传递数组	保护原数组不被修改	传递�
 对于二维数组，列数必须固定，或者使用指针数组（int **arr）。
 需要保护原数组不被修改时，可以使用 const 限制，如 void func(const int *arr) {}。
 
+给一个字符串 找出里面最长的单词并返回（单词间用，或者空格等其他标点符号分割）
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define MAX_WORD_LEN 100  // 假设最长单词不会超过 100
+void findLongestWork(const char *str, char *longestWork) {
+    int maxLen = 0, currentLen = 0;
+    const char *start = str, *wordStart = NULL;
+
+    while(*str){
+        if(isalpha(*str)) {
+            if(currentLen == 0) wordStart = str;
+            currentLen++;
+        }
+        else {
+            if(currentLen > maxLen){
+                maxLen = currentLen;
+                strncpy(longestWord, wordStart, maxLen);
+                longestWord[maxLen] = '\0';
+            }   
+            currentLen = 0;
+        }
+        str++;
+    }
+    if(currentLen > maxLen){
+        strncpy(longestWord, wordStart, currentLen);
+        longestWord[currentLen] = '\0';
+    }
+}
+int main() {
+    char str[] = "Hello, world! This is an example sentence, longest_word_test.";
+    char longestWord[MAX_WORD_LEN];
+
+    findLongestWord(str, longestWord);
+    printf("最长单词: %s\n", longestWord);
+
+    return 0;
+}
+
+遍历字符串，遇到字母时记录单词起点并计算长度。
+遇到**分隔符（如空格、标点符号）**时，检查是否是当前最长单词。
+处理字符串末尾情况，避免最后一个单词被忽略。
+使用 isalpha() 判断是否是字母，strncpy() 复制最长单词。
+
 
 
 
