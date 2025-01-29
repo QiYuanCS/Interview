@@ -487,6 +487,172 @@ def check_system_architecture():
 check_system_architecture()
 运行此脚本后会显示系统架构信息。
 
+访问方式
+多维数组（Array）
+在连续的内存块中存储数据。
+访问速度快，支持直接索引（arr[i][j]）。
+适用于数据大小已知、访问频繁的场景。
+
+
+链表（Linked List）
+由多个动态分配的节点组成，每个节点存储数据并指向下一个节点。
+不需要连续的内存空间。
+适用于数据大小不确定、需要频繁插入和删除的场景。
+
+多维数组
+直接使用索引访问元素（O(1) 时间复杂度）
+int arr[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+printf("%d", arr[1][2]); // 访问第 2 行第 3 列
+
+链表
+需要从头开始遍历才能找到特定元素（O(n) 时间复杂度）
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* head = (struct Node*)malloc(sizeof(struct Node));
+head->data = 10;
+head->next = NULL;
+
+内存管理
+多维数组
+静态分配（如 int arr[10][10]）时，编译时确定大小，不能动态调整大小。
+也可以动态分配（malloc()），但调整大小很麻烦。
+链表
+动态分配，使用 malloc() 和 free() 分配和释放内存。
+适用于需要动态调整大小的数据结构。
+
+插入和删除
+多维数组
+插入或删除操作复杂，需要移动大量数据（O(n) 时间复杂度）。
+例如，在 arr[5][5] 中插入一行，需要移动所有后续数据。
+
+链表
+插入和删除操作简单，只需调整指针（O(1) 时间复杂度）。
+例如，在链表的中间插入一个节点：
+struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+newNode->data = 20;
+newNode->next = head->next;
+head->next = newNode;
+
+内存使用效率
+
+多维数组
+由于连续存储，没有额外的指针开销，但可能会浪费内存（例如，数组可能预分配了但未使用的空间）。
+链表
+每个节点都需要额外的指针存储地址，因此占用的内存比数组多。
+适用于数据量变化大的情况，但会增加内存碎片。
+
+总结
+多维数组 适用于已知大小的数据集，访问速度快，但调整大小不便。
+链表 适用于动态变化的数据结构，插入删除方便，但访问速度较慢，且需要额外存储指针。
+选择取决于需求，如果需要频繁查找，数组更合适；如果需要频繁修改，链表更合适。
+如果你的数据是固定大小、访问频繁，用 数组；如果数据大小不定、插入删除多，用 链表。
+
+在 C 语言中，可以通过三种方式向函数传递数组：
+通过指针传递（推荐方式）
+通过固定大小的数组传递
+通过 struct 传递数组（不常用）
+1. 通过指针传递（推荐方式）
+
+数组在 C 语言中会**衰退（decay）**成指向首元素的指针，因此可以使用指针传递整个数组。
+一维数组传递
+#include <stdio.h>
+
+void printArray(int *arr, int size) {  // 等价于 void printArray(int arr[], int size)
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int nums[] = {1, 2, 3, 4, 5};
+    int size = sizeof(nums) / sizeof(nums[0]);  // 计算数组长度
+    printArray(nums, size);  // 传递数组
+    return 0;
+}
+二维数组传递
+在 C 语言中，二维数组的行数可以忽略，但列数必须指定，否则编译器无法确定内存布局。
+#include <stdio.h>
+
+void printMatrix(int arr[][3], int rows) {  // 列数必须写明
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < 3; j++) {
+            printf("%d ", arr[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int matrix[2][3] = {{1, 2, 3}, {4, 5, 6}};
+    printMatrix(matrix, 2);  // 传递数组
+    return 0;
+}
+如果列数是动态的，可以使用 指针数组：
+void printMatrix(int **arr, int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%d ", arr[i][j]);
+        }
+        printf("\n");
+    }
+}
+2. 通过固定大小的数组传递
+
+这种方式适用于固定大小的数组，但不推荐，因为不够灵活。
+#include <stdio.h>
+
+void printArray(int arr[5]) {  // 数组大小必须固定
+    for (int i = 0; i < 5; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int nums[5] = {10, 20, 30, 40, 50};
+    printArray(nums);  // 传递数组
+    return 0;
+}
+⚠️ 注意：在 printArray(int arr[5]) 里，arr 仍然是指针，编译器不会检查数组大小。
+3. 通过 struct 传递数组（不常用）
+
+如果数组必须以值传递（而不是指针），可以使用 struct 包装数组：
+#include <stdio.h>
+
+struct ArrayWrapper {
+    int arr[5];  // 固定大小的数组
+};
+
+void printArray(struct ArrayWrapper wrapper) {
+    for (int i = 0; i < 5; i++) {
+        printf("%d ", wrapper.arr[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    struct ArrayWrapper w = {{1, 2, 3, 4, 5}};
+    printArray(w);  // 以值传递整个数组
+    return 0;
+}
+优点：
+允许按值传递数组，不会影响原数组的数据。
+但 struct 传递较慢，通常不推荐。
+总结
+
+方式	适用情况	优点	缺点
+指针传递（推荐）	一维数组、二维数组	灵活，可处理动态大小	不能自动获取数组大小
+固定大小数组	固定大小的数组	代码清晰	不够灵活
+struct 包装数组	需要按值传递数组	保护原数组不被修改	传递时占用内存更大
+✅ 建议：
+使用指针传递（推荐），并传递数组大小，以保证通用性。
+对于二维数组，列数必须固定，或者使用指针数组（int **arr）。
+需要保护原数组不被修改时，可以使用 const 限制，如 void func(const int *arr) {}。
+
 
 
 
